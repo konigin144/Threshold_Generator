@@ -2,9 +2,9 @@ import numpy
 from random import random,randint
 
 class ThresholdFunction():
-    LFSRregs = []       # array containing current states of registers
+    LFSRregs = []   # array containing current states of registers
 
-    xorTable = {
+    xorTable = {    # mapped registers' sizes and bits to xor
         20 : [17,20],
         21 : [19,21],
         22 : [21,22],
@@ -48,7 +48,7 @@ class ThresholdFunction():
         60 : [59,60]
     }
     
-    def initial(self, sizesArr): #Stany poczatkowe same 0 i 1 na końcu - 2
+    def initial(self, sizesArr):
         # Sets LFSR registers' initial states as 0s and one 1 in the end.
         initRegsArr = []
         for i in sizesArr:
@@ -70,12 +70,13 @@ class ThresholdFunction():
         return initRegsArr
 
     def definedInitial(self, valuesArr):
+        # Sets predefined LFSR registers' initial states.
         initRegsArr = []
         for values in valuesArr:
             initRegsArr.append(values)
         return initRegsArr
 
-    def xor(self, reg): #POMOCNICZA
+    def xor(self, reg):
         # XOR operation on bits of given register
 
         # gets values to XOR
@@ -93,7 +94,7 @@ class ThresholdFunction():
                     result = result ^ valuesToXor[k] 
         return result
 
-    def LFSR(self, reg): #Funkcja przetwarza jedno taktowanie jednego rejestru - POMOCNICZA
+    def LFSR(self, reg):
         # Processes one tact of one LFSR register
         output = reg[len(reg)-1]
         xorResult = self.xor(reg)
@@ -102,13 +103,13 @@ class ThresholdFunction():
         #self.LFSRregs.append(reg[:])
         return output
 
-    def checkRelativelyFirst(self, a, b): #sprawdzenie czy funkcja jest relatywnie pierwsza - POMOCNICZA
+    def checkRelativelyFirst(self, a, b): 
         # Checks if given two numbers are relatively first. Returns True if yes, returns False otherwise.
         if b > 0:
             return self.checkRelativelyFirst(b, a%b)
         return a
 
-    def randomSizeArray(self, numOfRegs): #losowanie rozmiarów tablic -- 1
+    def randomSizeArray(self, numOfRegs):
         # Generate random sizes for a given number of arrays.
         sizesArr = []
         for i in range(numOfRegs):
@@ -128,12 +129,9 @@ class ThresholdFunction():
                         if temp == len(sizesArr)+1:
                             sizesArr.append(size)
                             break
-                        """else:
-                            arrSize = randint(20,60)
-                            temp = 1"""
         return sizesArr
 
-    def generate(self): #funkcja tworzy input z rejestrów dla funkcji progowej - 3
+    def generate(self):
         # Prepares an input for threshold function. Connects outputs from arrays.
         resultArr = []
         for arr in self.LFSRregs:
@@ -141,7 +139,7 @@ class ThresholdFunction():
         return resultArr
 
 
-    def thresholdFunction(self, n): #Funkcja progowa
+    def thresFunc(self, n):
         # Generates 0 or 1 basing on outputs of LFSR registers.
         sum = 0
         resultArr = []
@@ -154,7 +152,6 @@ class ThresholdFunction():
             else:
                 resultArr.append(0)
             sum = 0
-        #print(resultArr)
         return resultArr
 
     def __init__(self, numRegs, initType, regVals=None):
@@ -168,19 +165,3 @@ class ThresholdFunction():
                 self.LFSRregs = self.initial(sizesArr)
             else:
                 self.LFSRregs = self.randomInitial(sizesArr)
-        
-
-        #print(sizesArr)
-        #print(self.LFSRregs)
-
-
-
-"""
-arr1 = randomSizeArray(5)
-arr2 = initial(arr1)
-arr3 = randomInitial(arr2)
-arr4 = thresholdFunction(arr3,5,1000000)
-f = open("file.txt", "w")
-for i in arr4:
-    f.write(str(i))
-f.close()"""

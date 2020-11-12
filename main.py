@@ -2,6 +2,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+from PyQt5 import QtTest
+
 import generator
 
 import sys
@@ -40,6 +42,7 @@ class Okno(QMainWindow):
         self.registersNumSpin = QSpinBox()
         self.registersNumSpin.setRange(1, 11)
         self.registersNumSpin.setSingleStep(2)
+        self.registersNumSpin.lineEdit().setReadOnly(True)
 
         registersButton = QPushButton()
         registersButton.setFixedSize(40,40)
@@ -90,7 +93,7 @@ class Okno(QMainWindow):
         self.randomButton = QRadioButton("Random init")
         self.randomButton.setChecked(True)
 
-        self.zerosButton = QRadioButton("000...0001")
+        self.zerosButton = QRadioButton("000...0001 init")
 
         initButtonsLayout = QHBoxLayout()
         initButtonsLayout.addWidget(self.randomButton)
@@ -99,52 +102,35 @@ class Okno(QMainWindow):
         initButtonsLayoutW = QWidget()
         initButtonsLayoutW.setLayout(initButtonsLayout)
 
-        #Load config file
-        """configText = QLabel()
-        configText.setText("Load config file")
-        configText.setFont(QFont('Lucida Console',12))
-
-        configButton = QPushButton()
-        configButton.setFixedSize(40,40)
-        configButton.setIcon(QIcon('Icons/folder.png'))
-        configButton.clicked.connect(self.configFileClicked)
-
-        configLayout = QHBoxLayout()
-        configLayout.addWidget(configText)
-        configLayout.addWidget(configButton)
-        configLayoutW = QWidget()
-        configLayoutW.setLayout(configLayout)"""
-
-        configButton = QPushButton()
-        configButton.setText("GENERATE FROM CONFIG FILE")
-        configButton.setFont(QFont('Lucida Console',10))
-        configButton.clicked.connect(self.configFileClicked)
-
-        configLayout = QHBoxLayout()
-        configLayout.addWidget(configButton)
-        configLayoutW = QWidget()
-        configLayoutW.setLayout(configLayout)
-
-        #Buttons
+        #Generate button
         generateButton = QPushButton()
         generateButton.setText("GENERATE")
         generateButton.setFont(QFont('Lucida Console',10))
         generateButton.clicked.connect(self.generateClicked)
 
-        generateLayout = QHBoxLayout()
-        generateLayout.addWidget(generateButton)
-        generateLayoutW = QWidget()
-        generateLayoutW.setLayout(generateLayout)
+        #Load config file
+        configButton = QPushButton()
+        configButton.setText("GENERATE FROM CONFIG FILE")
+        configButton.setFont(QFont('Lucida Console',10))
+        configButton.clicked.connect(self.configFileClicked)
+
+        #Status
+        self.outputText = QLabel()
+        self.outputText.setText("Set parameters below or choose a config file")
+        self.outputText.setAlignment(Qt.AlignCenter)
+        self.outputText.setFont(QFont('Lucida Console',12))
 
         #Main layout
         main = QVBoxLayout()
         main.setAlignment(Qt.AlignCenter)
         main.addWidget(titleLayoutW)
+        main.addWidget(self.outputText)
         main.addWidget(titleRegistersLayoutW)
         main.addWidget(titleBitsLayoutW)
         main.addWidget(initButtonsLayoutW)
-        main.addWidget(generateLayoutW)
-        main.addWidget(configLayoutW)
+        main.addWidget(generateButton)
+        main.addWidget(configButton)
+        
 
         mainW = QWidget()
         mainW.setLayout(main)
@@ -178,7 +164,6 @@ class Okno(QMainWindow):
             c.write(str(self.registersNumSpin.value())+'\n')
             c.write(str(self.bitsNumSpin.value())+'\n')
             for r in thresholdFunc.LFSRregs:
-                print(len(r))
                 c.write(str(len(r))+' ')
             c.write('\n')
 
@@ -188,12 +173,16 @@ class Okno(QMainWindow):
                 c.write('\n')
             c.close
 
-            output = thresholdFunc.thresholdFunction(self.bitsNumSpin.value())
+            output = thresholdFunc.thresFunc(self.bitsNumSpin.value())
 
             f = open(filenameOutput[0], "w")
             for i in output:
                 f.write(str(i))
             f.close
+
+            self.outputText.setText("The result and config files has been created")
+            QtTest.QTest.qWait(3000)
+            self.outputText.setText("Set parameters above or choose a config file")
 
     def registersFileClicked(self):
         """Loads message from file"""
@@ -276,7 +265,5 @@ window.show()
 app.exec_()
 
 """TODO: 
-    - pasek statusu czy coś
-    - nieparzysta liczba rejestrów
     - info
 """
