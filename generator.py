@@ -5,6 +5,9 @@ class ThresholdFunction():
     LFSRregs = []   # array containing current states of registers
 
     xorTable = {    # mapped registers' sizes and bits to xor
+        #5 : [3,5],     #EXAMPLE
+        #7 : [6,7],     #EXAMPLE
+        #9 : [5,9],     #EXAMPLE
         20 : [17,20],
         21 : [19,21],
         22 : [21,22],
@@ -55,7 +58,6 @@ class ThresholdFunction():
             temp = [0] * i
             temp[i-1] = 1
             initRegsArr.append(temp[:])
-            print(temp)
         return initRegsArr
         
     def randomInitial(self, sizesArr):

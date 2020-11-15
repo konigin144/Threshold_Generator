@@ -1,1 +1,42 @@
-TODO
+ ~~ Opis działania algorytmu ~~
+Generator progowy (threshold generator) wykorzystuje zmienną nieparzystą liczbę rejestrów LFSR. W celu osiągnięcia najlepszych wyników, długości rejestrów są względnie pierwsze.
+Każdy z rejestrów posiada wartość początkową składającą się z zer i jedynek (lub samych jedynek). Podczas każdej operacji taktowania, rejestry wykonują operację XOR na bitach o odgórnie przypisanych indeksach. Bity w rejestrze są przesuwane o jedno miejsce w prawo, w miejscu najbardziej znaczącego bitu wstawiany jest wynik operacji XOR. Bit, który uprzednio był najmniej znaczący, "wypada" z rejestru i jest wynikiem taktowania.
+Po taktowaniu funkcja progowa jako wejście przyjmuje wyniki ze wszystkich rejestrów. Zebrane bity poddawane są funkcji:
+    if (sum(input) > n/2) return 1
+    else return 0
+gdzie input oznacza bity wejściowe, a n liczbę rejestrów.
+Liczba wykonanych taktowań jest równa liczbie bitów, które generator ma wygenerować.
+
+~~ Przykład ~~
+Załóżmy, że chcemy wygenerować 6 bitów i generator posiada 3 rejestry o długościach 5, 7, 9 bitów. Ich wartości początkowe to:
+    10111,
+    1010011,
+    011000101,
+a ich indeksy bitów poddawanych operacji XOR to [3,5], [6,7], [5,9].
+Taktowanie 1:
+    Rejestr r5:
+        wynikiem operacji, jest skrajnie prawy bit, czyli 1;
+        1 XOR 1 = 0;
+        nowa wartość rejestru: 01011.
+    Rejestr r7:
+        wynik operacji: 1;
+        1 XOR 1 = 0;
+        nowa wartość rejestru: 0101001.
+    Rejestr r9:
+        wynik operacji: 1;
+        0 XOR 1 = 1;
+        nowa wartość rejestru: 101100010.
+    Do funkcji progowej przekazywane są wyniki rejestrów, czyli [1, 1, 1].
+    Funkcja progowa: (1+1+1) > (3/2), więc pierwszym wygenerowanym bitem jest 1.
+Ostateczny wynik generacji: 111010
+
+~~ Instrukcja programu ~~
+Użytkownik podaje liczbę rejestrów z zakresu 20-60 oraz liczbę bitów, które generator ma wylosować. Użytkownik ma dwie opcje wyboru rodzaju wartości początkowych rejestrów: same zera z jedynką jako najmniej znaczący bit lub losowe wartości (najmniej znaczący bit nie jest losowy, jest zawsze równy 1). Długości rejestrów są losowane z zasadą, że długości powinny być liczbami względnie pierwszymi.
+Zamiast ręcznie ustawiać powyższe opcje użytkownik ma możliwość wczytania pliku konfiguracyjnego.
+Wynik generacji jest zapisywany do pliku .txt. Nie jest wyświetlany w programie ze względu na przeważnie sporą długość. Oprócz pliku wynikowego generowany jest plik config zawierający początkowe ustawienia rejestrów. Dzięki niemu możliwe jest ponowne wygenerowanie tego samego ciągu.
+
+~~ Struktura pliku config ~~
+<liczba rejestrów>
+<liczba bitów do wygenerowania>
+<długości rejestrów oddzielone spacjami>
+<wartości początkowe rejestrów, każda w nowej linii>

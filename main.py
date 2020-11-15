@@ -147,10 +147,42 @@ class Okno(QMainWindow):
 
     def generateClicked(self, regSizes = None, regValues = None):
         """Handles generate button"""
+        if regSizes is not False:
+            for size in regSizes:
+                if int(size) not in generator.ThresholdFunction.xorTable:
+                    self.outputText.setStyleSheet('color: red')
+                    self.outputText.setText("Wrong register size")
+                    QtTest.QTest.qWait(3000)
+                    self.outputText.setStyleSheet('color: black')
+                    self.outputText.setText("Set parameters above or choose a config file")
+                    return
+            if len(regSizes) > 11:
+                self.outputText.setStyleSheet('color: red')
+                self.outputText.setText("Too many register (maximum is 11)")
+                QtTest.QTest.qWait(3000)
+                self.outputText.setStyleSheet('color: black')
+                self.outputText.setText("Set parameters above or choose a config file")
+                return
+            if len(regSizes) < 1:
+                self.outputText.setStyleSheet('color: red')
+                self.outputText.setText("Number of registers cannot be lower than 1")
+                QtTest.QTest.qWait(3000)
+                self.outputText.setStyleSheet('color: black')
+                self.outputText.setText("Set parameters above or choose a config file")
+                return
+            if len(regSizes) %2 == 0:
+                self.outputText.setStyleSheet('color: red')
+                self.outputText.setText("Number of registers should be odd")
+                QtTest.QTest.qWait(3000)
+                self.outputText.setStyleSheet('color: black')
+                self.outputText.setText("Set parameters above or choose a config file")
+                return
+        self.outputText.setStyleSheet('color: blue')
+        self.outputText.setText("Processing...")
         thresholdFunc = generator.ThresholdFunction(self.registersNumSpin.value(), self.initState(), regValues)
         filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")
+        
         if filenameOutput[0] != '':
-
             dir = filenameOutput[0]
             i = len(dir)-1
             while True:
@@ -180,9 +212,11 @@ class Okno(QMainWindow):
                 f.write(str(i))
             f.close
 
+            self.outputText.setStyleSheet('color: green')
             self.outputText.setText("The result and config files has been created")
             QtTest.QTest.qWait(3000)
-            self.outputText.setText("Set parameters above or choose a config file")
+        self.outputText.setStyleSheet('color: black')
+        self.outputText.setText("Set parameters above or choose a config file")
 
     def registersFileClicked(self):
         """Loads message from file"""
@@ -195,7 +229,31 @@ class Okno(QMainWindow):
             f = open(files[0], 'r')
             with f:
                 data = f.read()
-                self.registersNumSpin.setValue(int(data))
+
+                if int(data) > 11:
+                    self.outputText.setStyleSheet('color: red')
+                    self.outputText.setText("Too many register (maximum is 11)")
+                    QtTest.QTest.qWait(3000)
+                    self.outputText.setStyleSheet('color: black')
+                    self.outputText.setText("Set parameters above or choose a config file")
+                    return
+                elif int(data) < 1:
+                    self.outputText.setStyleSheet('color: red')
+                    self.outputText.setText("Number of registers cannot be lower than 1")
+                    QtTest.QTest.qWait(3000)
+                    self.outputText.setStyleSheet('color: black')
+                    self.outputText.setText("Set parameters above or choose a config file")
+                    return
+                elif int(data)  %2 == 0:
+                    self.outputText.setStyleSheet('color: red')
+                    self.outputText.setText("Number of registers should be odd")
+                    QtTest.QTest.qWait(3000)
+                    self.outputText.setStyleSheet('color: black')
+                    self.outputText.setText("Set parameters above or choose a config file")
+                    return
+                
+                else:
+                    self.registersNumSpin.setValue(int(data))
 
     def bitsFileClicked(self):
         """Loads key from file"""
@@ -208,9 +266,16 @@ class Okno(QMainWindow):
             f = open(files[0], 'r')
             with f:
                 data = f.read()
+
+                if int(data) < 1:
+                    self.outputText.setStyleSheet('color: red')
+                    self.outputText.setText("Number of bits cannot be lower than 1")
+                    QtTest.QTest.qWait(3000)
+                    self.outputText.setStyleSheet('color: black')
+                    self.outputText.setText("Set parameters above or choose a config file")
+                    return
+
                 self.bitsNumSpin.setValue(int(data))
-
-
 
     def configFileClicked(self):
         """Loads config file"""
@@ -247,7 +312,8 @@ class Okno(QMainWindow):
         infoW = QMessageBox()
         infoW.setWindowTitle("Threshold Generator")
         infoW.setWindowIcon(QIcon('Icons/info.png'))
-        infoW.setFont(QFont('Lucida Console'))
+        #infoW.setFont(QFont('Lucida Console'))
+        infoW.setStyleSheet("QLabel{min-width: 900px;}")
         f = open("info.txt", "r", encoding='utf8')
         text = f.read()
         infoW.setText(text)
@@ -263,7 +329,3 @@ window.setStyleSheet("background-color: rgb(220,220,220);")
 window.show()
 
 app.exec_()
-
-"""TODO: 
-    - info
-"""
