@@ -1,6 +1,6 @@
 # Threshold_Generator
 LFSR-based threshold generator of 0 and 1  
-(Work in progress) Encypt/decrypt file using generated key  
+Encypt/decrypt file using generated key  
 
 Python // GUI created with PyQT  
 

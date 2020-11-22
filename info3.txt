@@ -1,1 +1,6 @@
-TODO
+ ~~ Opis algorytmu szyfrowania ~~
+Plik jest deszyfrowany poprzez poddanie go operacji XOR z podanym kluczem.
+
+~~ Instrukcja programu ~~
+Użytkownik podaje zaszyfrowany plik oraz plik z kluczem.
+Wynik deszyfracji jest zapisywany do pliku .txt.

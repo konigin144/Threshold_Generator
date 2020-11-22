@@ -1,1 +1,6 @@
-TODO
+ ~~ Opis algorytmu szyfrowania ~~
+Generator progowy generuje n-elementowy ciąg liczb losowych, gdzie n = długość pliku liczona w bitach. Podczas szyfrowania plik poddawany jest operacji XOR z wylosowanym ciągiem.
+
+~~ Instrukcja programu ~~
+Użytkownik podaje plik, który chciałby zaszyfrować. Podaje również parametry generatora, tj. liczbę rejestrów oraz rodzaj początkowych wartości. Istnieje również możliwość podania parametrów z pliku config lub gotowego klucza.
+Wynik szyfrowania jest zapisywany do pliku .txt. Nie jest wyświetlany w programie ze względu na przeważnie sporą długość. Oprócz niego generowany jest plik config zawierający początkowe ustawienia rejestrów oraz plik z kluczem.

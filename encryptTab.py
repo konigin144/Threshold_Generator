@@ -192,7 +192,7 @@ class Encrypt(QWidget):
             files = self.encryptFileButton.selectedFiles()
             self.chooseFilePath.setText(files[0])            
 
-    def encryptClicked(self, regSizes = None, regValues = None, key = None):
+    def encryptClicked(self, regSizes = None, regValues = None):
         f = open(self.chooseFilePath.text(), 'r')
         with f:
             data = f.read()
@@ -272,8 +272,7 @@ class Encrypt(QWidget):
                     break
             dir2 += '_key.txt'
 
-            if key is None:
-                key = thresholdFunc.thresFunc(len(bits))
+            key = thresholdFunc.thresFunc(len(bits))
 
             f = open(dir2, "w")
             for i in key:
@@ -300,12 +299,28 @@ class Encrypt(QWidget):
         self.registersFromFileButton.hide()
         self.keyFileButton.show()
 
+        f = open(self.chooseFilePath.text(), 'r')
+        with f:
+            data = f.read()
+            f.close()
+        bits = bitarray()
+        bits.frombytes(data.encode('utf-8'))
+        bits = bits.to01()
+
         if self.keyFileButton.exec():
             files = self.keyFileButton.selectedFiles()
             f = open(files[0], 'r')
             with f:
-                data = f.read()
-                self.encryptClicked(key = data)
+                key = f.read()
+                f.close()
+
+            filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")        
+            if filenameOutput[0] != '':
+                f = open(filenameOutput[0], "w")
+                for i in range(len(bits)):
+                    el = int(bits[i]) ^ int(key[i])
+                    f.write(str(el))
+                f.close
 
     #def encryptConfigClicked(self):
         """Encrypts with config loaded from file"""

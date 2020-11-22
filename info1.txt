@@ -40,5 +40,3 @@ Wynik generacji jest zapisywany do pliku .txt. Nie jest wyświetlany w programie
 <liczba bitów do wygenerowania>
 <długości rejestrów oddzielone spacjami>
 <wartości początkowe rejestrów, każda w nowej linii>
-
-~~ Autor: Kinga Skrętkowicz 140778 Grupa I4-2 ~~
