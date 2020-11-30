@@ -7,7 +7,7 @@ Po taktowaniu funkcja progowa jako wejście przyjmuje wyniki ze wszystkich rejes
 gdzie input oznacza bity wejściowe, a n liczbę rejestrów.
 Liczba wykonanych taktowań jest równa liczbie bitów, które generator ma wygenerować.
 
-~~ Przykład ~~
+ ~~ Przykład ~~
 Załóżmy, że chcemy wygenerować 6 bitów i generator posiada 3 rejestry o długościach 5, 7, 9 bitów. Ich wartości początkowe to:
     10111,
     1010011,
@@ -30,12 +30,12 @@ Taktowanie 1:
     Funkcja progowa: (1+1+1) > (3/2), więc pierwszym wygenerowanym bitem jest 1.
 Ostateczny wynik generacji: 111010
 
-~~ Instrukcja programu ~~
+ ~~ Instrukcja programu ~~
 Użytkownik podaje liczbę rejestrów z zakresu 20-60 oraz liczbę bitów, które generator ma wylosować. Użytkownik ma dwie opcje wyboru rodzaju wartości początkowych rejestrów: same zera z jedynką jako najmniej znaczący bit lub losowe wartości (najmniej znaczący bit nie jest losowy, jest zawsze równy 1). Długości rejestrów są losowane z zasadą, że długości powinny być liczbami względnie pierwszymi.
 Zamiast ręcznie ustawiać powyższe opcje użytkownik ma możliwość wczytania pliku konfiguracyjnego.
 Wynik generacji jest zapisywany do pliku .txt. Nie jest wyświetlany w programie ze względu na przeważnie sporą długość. Oprócz pliku wynikowego generowany jest plik config zawierający początkowe ustawienia rejestrów. Dzięki niemu możliwe jest ponowne wygenerowanie tego samego ciągu.
 
-~~ Struktura pliku config ~~
+ ~~ Struktura pliku config ~~
 <liczba rejestrów>
 <liczba bitów do wygenerowania>
 <długości rejestrów oddzielone spacjami>

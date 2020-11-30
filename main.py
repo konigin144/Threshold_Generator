@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 
 from PyQt5 import QtTest
 
-import generator, thresholdTab, encryptTab, decryptTab
+import generator, thresholdTab, encryptTab, decryptTab, testsTab
 
 import sys
 import re, os
@@ -20,9 +20,11 @@ class Okno(QMainWindow):
         self.tab1 = thresholdTab.Threshold(self)
         self.tab2 = encryptTab.Encrypt(self)
         self.tab3 = decryptTab.Decrypt(self)
+        self.tab4 = testsTab.Tests(self)
         self.tabs.addTab(self.tab1, "Threshold Generator")
         self.tabs.addTab(self.tab2, "Encrypt")
         self.tabs.addTab(self.tab3, "Decrypt")
+        self.tabs.addTab(self.tab4, "Tests")
 
         self.setCentralWidget(self.tabs)
 

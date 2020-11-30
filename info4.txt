@@ -1,0 +1,20 @@
+ ~~ Test pojedynczych bitów ~~
+Sprawdza, czy liczba jedynek mieści się w przedziale (9725, 10275).
+
+ ~~ Test serii ~~
+Wyznacza liczbę wystąpień serii zer lub jedynek o różnych długościach. Serie o długości większej niż 6 traktowane są jak serie o długości 6. Dwanaście zliczonych serii musi mieścić się w poniższych przedziałach:
+    1   <2315, 2685>
+    2   <1114, 1386>
+    3   <527, 723>
+    4   <240, 384>
+    5   <103, 209>
+    6+  <103, 209>
+
+ ~~ Test długiej serii ~~
+Sprawdza, czy w ciągu nie ma serii zer lub jedynek o długości 26 lub więcej znaków.
+
+ ~~ Test pokerowy ~~~
+Ciąg dzielony jest na 5000 segmentów 4-bitowych. Zlicza się liczbę wystąpień każdej z 16 kombinacji. Następnie oblicza się:
+    X = (16/5000) * sum(si^2) - 5000
+    gdzie si oznacza liczbę wystąpień segmentów o wartości i = <0, 15>
+Test powiedzie się, jeśli X = (2,16; 46,17)

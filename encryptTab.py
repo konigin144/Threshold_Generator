@@ -120,12 +120,6 @@ class Encrypt(QWidget):
         encryptKeyButton.setFont(QFont('Lucida Console',10))
         encryptKeyButton.clicked.connect(self.encryptKeyClicked)
 
-        #Encrypt with config button
-        #encryptConfigButton = QPushButton()
-        #encryptConfigButton.setText("ENCRYPT WITH CONFIG")
-        #encryptConfigButton.setFont(QFont('Lucida Console',10))
-        #encryptConfigButton.clicked.connect(self.encryptConfigClicked)
-
         #Layout
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignCenter)
@@ -136,7 +130,6 @@ class Encrypt(QWidget):
         self.layout.addWidget(chooseFileLayoutW)
         self.layout.addWidget(encryptButton)
         self.layout.addWidget(encryptKeyButton)
-        #self.layout.addWidget(encryptConfigButton)
         self.setLayout(self.layout)
 
     def initState(self):
@@ -280,11 +273,9 @@ class Encrypt(QWidget):
             f.close
             
             #result
-            #output = []
             f = open(filenameOutput[0], "w")
             for i in range(len(bits)):
                 el = int(bits[i]) ^ int(key[i])
-                #output.append(el)
                 f.write(str(el))
             f.close
 
@@ -313,50 +304,29 @@ class Encrypt(QWidget):
             with f:
                 key = f.read()
                 f.close()
-
-            filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")        
-            if filenameOutput[0] != '':
-                f = open(filenameOutput[0], "w")
-                for i in range(len(bits)):
-                    el = int(bits[i]) ^ int(key[i])
-                    f.write(str(el))
-                f.close
-
-    #def encryptConfigClicked(self):
-        """Encrypts with config loaded from file"""
-        """self.registersFromFileButton.hide()
-        self.keyFileButton.show()
-
-        if self.keyFileButton.exec():
-            files = self.keyFileButton.selectedFiles()
-            f = open(files[0], 'r')
-            with f:
-                data = f.readlines()
-                self.registersNumSpin.setValue(int(data[0]))
-
-                regSizes = data[2]
-                regSizes = regSizes[:-2]
-                regSizes = regSizes.split()
-
-                regValues = []
-                for i in range(int(data[0])):
-                    temp = data[3+i]
-                    temp = temp[:-1]
-                    temp = list(temp)
-                    temp2 = []
-                    for el in temp:
-                        el2 = int(el)
-                        temp2.append(el2)
-                    regValues.append(temp2)
-                self.encryptClicked(regSizes, regValues)"""
+            if len(key) >= len(bits):
+                filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")        
+                if filenameOutput[0] != '':
+                    f = open(filenameOutput[0], "w")
+                    for i in range(len(bits)):
+                        el = int(bits[i]) ^ int(key[i])
+                        f.write(str(el))
+                    f.close
+            else:
+                self.statusText.setStyleSheet('color: red')
+                self.statusText.setText("Key is too short (minimum "+str(len(bits))+")")
+                QtTest.QTest.qWait(3000)
+                self.statusText.setStyleSheet('color: black')
+                self.statusText.setText("Set parameters above or choose a config file")
+                return
 
     def infoWindow(self):
         """Opens info window"""
         infoW = QMessageBox()
-        infoW.setWindowTitle("Threshold Generator")
+        infoW.setWindowTitle("Encryptor")
         infoW.setWindowIcon(QIcon('Icons/info.png'))
         #infoW.setFont(QFont('Lucida Console'))
-        infoW.setStyleSheet("QLabel{min-width: 900px;}")
+        #infoW.setStyleSheet("QLabel{min-width: 900px;}")
         f = open("info2.txt", "r", encoding='utf8')
         text = f.read()
         infoW.setText(text)

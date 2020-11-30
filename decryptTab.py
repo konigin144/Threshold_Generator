@@ -210,23 +210,25 @@ class Decrypt(QWidget):
             key = f.read()
             f.close()
         
-        result = []
-        for i in range(len(data)):
-            result.append(int(data[i]) ^ int(key[i]))
-        result = bitarray(result).tobytes().decode('utf-8')
-        filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")
-        if filenameOutput[0] != '':
-            f = open(filenameOutput[0], "w")
-            f.write(result)
-            f.close
+        if len(key) >= len(data):
+
+            result = []
+            for i in range(len(data)):
+                result.append(int(data[i]) ^ int(key[i]))
+            result = bitarray(result).tobytes().decode('utf-8')
+            filenameOutput = QFileDialog.getSaveFileName(self, "Open Text File", os.path.abspath(os.getcwd()), "Text Files (*.txt)")
+            if filenameOutput[0] != '':
+                f = open(filenameOutput[0], "w")
+                f.write(result)
+                f.close
 
     def infoWindow(self):
         """Opens info window"""
         infoW = QMessageBox()
-        infoW.setWindowTitle("Threshold Generator")
+        infoW.setWindowTitle("Decryptor")
         infoW.setWindowIcon(QIcon('Icons/info.png'))
         #infoW.setFont(QFont('Lucida Console'))
-        infoW.setStyleSheet("QLabel{min-width: 900px;}")
+        #infoW.setStyleSheet("QLabel{min-width: 900px;}")
         f = open("info3.txt", "r", encoding='utf8')
         text = f.read()
         infoW.setText(text)
